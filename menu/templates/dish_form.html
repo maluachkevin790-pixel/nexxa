@@ -1,0 +1,83 @@
+{% extends 'menu/base.html' %}
+{% block title %}{{ action }} Dish{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm">
+
+      <div class="card-header bg-dark text-white">
+        <h4 class="mb-0">
+          {% if action == 'Add' %}
+            <i class="bi bi-plus-circle"></i> Add New Dish
+          {% else %}
+            <i class="bi bi-pencil-square"></i> Edit: {{ dish.name }}
+          {% endif %}
+        </h4>
+      </div>
+
+      <div class="card-body p-4">
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          <!-- Name -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="{{ form.name.id_for_label }}">
+              Dish Name <span class="text-danger">*</span>
+            </label>
+            {{ form.name }}
+            {% if form.name.errors %}
+              <div class="invalid-feedback d-block">{{ form.name.errors|join:", " }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Price -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="{{ form.price.id_for_label }}">
+              Price ($) <span class="text-danger">*</span>
+            </label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              {{ form.price }}
+            </div>
+            {% if form.price.errors %}
+              <div class="invalid-feedback d-block">{{ form.price.errors|join:", " }}</div>
+            {% endif %}
+            <div class="form-text">Must be greater than $0.00</div>
+          </div>
+
+          <!-- Category -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="{{ form.category.id_for_label }}">
+              Category
+            </label>
+            {{ form.category }}
+          </div>
+
+          <!-- Availability -->
+          <div class="mb-4 p-3 bg-light rounded">
+            <div class="form-check form-switch">
+              {{ form.availability }}
+              <label class="form-check-label fw-semibold ms-2"
+                     for="{{ form.availability.id_for_label }}">
+                Available on menu
+              </label>
+            </div>
+            <div class="form-text ms-2">Toggle off to hide this dish without deleting it.</div>
+          </div>
+
+          <!-- Actions -->
+          <div class="d-flex gap-2">
+            <a href="{% url 'dish_list' %}" class="btn btn-outline-secondary px-4">
+              <i class="bi bi-arrow-left"></i> Cancel
+            </a>
+            <button type="submit" class="btn btn-warning ms-auto px-4 fw-semibold">
+              <i class="bi bi-check-lg"></i> {{ action }} Dish
+            </button>
+          </div>
+        </form>
+      </div><!-- /card-body -->
+    </div><!-- /card -->
+  </div>
+</div>
+{% endblock %}
